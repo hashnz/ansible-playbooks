@@ -1,0 +1,43 @@
+---
+- name: install nodejs
+  apt: pkg={{item}} state=installed
+  with_items:
+    - nodejs
+    - npm
+
+- name: symlink for node
+  file: >
+    state=link
+    src=/usr/bin/nodejs
+    dest=/usr/bin/node
+
+- name: install node modules
+  npm: name={{item}} global=yes
+  with_items:
+    - statsd
+    - forever
+
+- name: statsd config directory
+  file: >
+    path=/etc/statsd
+    state=directory
+    owner=root
+    group=root
+    mode=0644
+
+- name: install statsd config
+  template: >
+    src=statsd-config.js
+    dest=/etc/statsd/config.js
+    owner=root
+    group=root
+    mode=0644
+
+- name: get forever list to check for starts
+  shell: forever list
+  register: forever_list
+  changed_when: false
+
+- name: start statsd
+  command: forever start /usr/local/bin/statsd /etc/statsd/config.js
+  when: "forever_list.stdout.find('/usr/local/bin/statsd') == -1"

@@ -1,0 +1,14 @@
+---
+- hosts: graphite
+  remote_user: root
+  gather_facts: false
+  vars:
+    - graphite_db: graphite
+    - graphite_db_user: graphite
+    - graphite_db_pass: 123456
+    - graphite_host: graphite.do
+    - grafana_host: grafana.do
+  roles:
+    - common
+    - graphite
+    - statsd
