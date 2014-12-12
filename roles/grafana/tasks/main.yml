@@ -1,0 +1,31 @@
+---
+- name: clone git repo
+  git: >
+    repo=https://github.com/grafana/grafana.git
+    dest=/srv/grafana
+    version=master
+    force=yes
+    update=yes
+
+- name: grafana config file
+  template: >
+    source=config.js
+    dest=/srv/grafana
+    owner=root
+    group=root
+    mode=0644
+
+- name: grafana vhost
+  template: >
+    src=grafana.conf
+    dest=/etc/apache2/sites-available
+    owner=root
+    group=root
+    mode=0644
+
+- name: enable graphite vhost
+  shell: "a2ensite grafana"
+  sudo: yes
+
+- name: reload apache
+  service: name=apache2 state=reloaded

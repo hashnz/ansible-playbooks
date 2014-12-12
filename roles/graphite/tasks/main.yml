@@ -79,5 +79,8 @@
   shell: "a2dissite 000-default"
   sudo: yes
 
+- name: enable headers mod
+  shell: "a2enmod headers"
+
 - name: reload apache
   service: name=apache2 state=reloaded

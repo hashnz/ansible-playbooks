@@ -8,8 +8,10 @@
     - graphite_db_pass: 123456
     - graphite_host: graphite.do
     - grafana_host: grafana.do
+    - elasticsearch_host: elastic.do
   roles:
     - common
     - graphite
     - statsd
     - elastic-search
+    - grafana
